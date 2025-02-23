@@ -11,6 +11,9 @@ import 'package:movie_app/presentation/common_widgets/common_widgets.dart';
 import 'package:movie_app/presentation/common_widgets/snackbar/error_snackbar_view.dart';
 import 'package:movie_app/presentation/feature/auth/controller/login_bloc.dart';
 
+import '../../../data/data_utility/api_end_points.dart';
+import '../home/controller/get_popular_movies/get_movies_bloc.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -52,6 +55,11 @@ class _LoginPageState extends State<LoginPage> {
            } else if (state is LoadedLoginState) {
              // ScaffoldMessenger.of(context).showSnackBar(
              //     infoSnackBarView(message: AppStrings.successfullyLogin));
+             context.read<GetMoviesBloc>().add(GetMoviesEvent.getNowPlayingApiRequestEvent(
+                 pageNo: 1,
+                 language: 'en-us',
+                 apiPath: ApiEndPoints.popularMovies));
+
              context.goNamed(AppRoutesName.homePage);
            }
          },

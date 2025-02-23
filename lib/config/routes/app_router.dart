@@ -7,6 +7,7 @@ import 'package:movie_app/config/routes/app_routes_name.dart';
 import 'package:movie_app/config/routes/redirect_util.dart';
 import 'package:movie_app/presentation/feature/auth/login_page.dart';
 import 'package:movie_app/presentation/feature/home/home_page.dart';
+import 'package:movie_app/presentation/feature/splash_interceptor/splash_interceptor_page.dart';
 
 
 class AppRouter {
@@ -18,7 +19,7 @@ class AppRouter {
       ],
       debugLogDiagnostics: true,
       navigatorKey: AppRouterNavigatorKey.rootNavigatorKey,
-      initialLocation: '/home',
+      initialLocation: '/splash',
       routes: [
         GoRoute(
           path: '/login',
@@ -28,6 +29,15 @@ class AppRouter {
           {
             return RedirectUtil.redirect(context, state);
           },
+        ),
+        GoRoute(
+          path: '/splash',
+          name: AppRoutesName.splashPage,
+          builder: (context, state) => SplashInterceptorPage(),
+          // redirect: (context , state)
+          // {
+          //   return RedirectUtil.redirect(context, state);
+          // },
         ),
         GoRoute(
           path: '/home',

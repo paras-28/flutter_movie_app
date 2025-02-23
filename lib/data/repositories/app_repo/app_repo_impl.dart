@@ -46,6 +46,36 @@ class AppRepoImpl implements AppRepo {
   }
 
   @override
+  Future<MovieResModel> getMovies(
+      {required int pageNo,
+      required String language,
+      required String path}) async {
+    dioInst.options.headers = getHTTPHeader();
+    dio.BaseOptions options = dioInst.options;
+    dioInst.options = options;
+    try {
+      var response = await DioClient(dioInst).get(
+          url: ApiEndPoints.basePath+path,
+          uniqueKey: ApiEndPoints.basePath+path,
+          queryParameters: {'language': language, 'page': pageNo},
+      );
+      return MovieResModel.fromJson(response.data);
+    } on dio.DioException catch (e) {
+      throw DioExceptions.fromDioError(
+              dioError: e, errorFrom: ApiEndPoints.basePath+path)
+          .errorMessage();
+      // if you want to customize the error message
+      //  int statusCode =  DioExceptions.fromDioError(dioError: e, errorFrom: "login").errorStatusCode();
+      //  if(statusCode == 400)
+      //  {
+      //    throw "Incorrect Email Password";
+      //  }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<MovieResModel> getNowPlayingMovies(
       {required int pageNo, required String language}) async {
     dioInst.options.headers = getHTTPHeader();

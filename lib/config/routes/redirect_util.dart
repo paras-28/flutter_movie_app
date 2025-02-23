@@ -4,8 +4,6 @@ import 'package:movie_app/config/dependency_injection/di.dart';
 import 'package:movie_app/core/utils/shared_prefs_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class RedirectUtil {
   static Future<String?> redirect(
       BuildContext context, GoRouterState state) async {
@@ -18,7 +16,7 @@ class RedirectUtil {
 
     debugPrint("userAuthenticated $userAuthenticated");
     debugPrint("path $path");
- if (userAuthenticated == false) {
+    if (userAuthenticated == false) {
       return '/login';
     } else {
       return null;

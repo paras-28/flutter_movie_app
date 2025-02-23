@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:movie_app/config/dependency_injection/di.dart';
+import 'package:movie_app/config/routes/app_routes_name.dart';
 import 'package:movie_app/core/utils/app_strings.dart';
 import 'package:movie_app/core/utils/debug_logger.dart';
+import 'package:movie_app/core/utils/is_list_exist.dart';
 import 'package:movie_app/data/data_utility/api_end_points.dart';
 import 'package:movie_app/domain/models/movie_res_model.dart';
 import 'package:movie_app/presentation/common_widgets/common_widgets.dart';
-import 'package:movie_app/presentation/feature/home/controller/get_popular_movies/get_popular_movies_bloc.dart';
-import 'package:movie_app/presentation/feature/home/controller/now_playing/now_playing_movie_bloc.dart';
 
-import 'controller/top_rated/top_rated_movie_bloc.dart';
-import 'controller/upcoming/upcoming_movies_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'controller/get_popular_movies/get_movies_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,54 +36,58 @@ class _HomePageState extends State<HomePage> {
         appBar: CustomAppbar(
           title: AppStrings.movieu,
           hasArrow: false,
+          actions: [
+            IconButton(onPressed: ()
+                {
+                  di<SharedPreferences>().clear();
+                  context.goNamed(AppRoutesName.loginPage);
+                }, icon: Icon(Icons.logout))
+
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              BlocBuilder<GetPopularMoviesBloc, GetPopularMoviesState>(
-                  bloc: GetPopularMoviesBloc()
-                    ..add(GetPopularMoviesAPIRequestEvent(
-                        pageNo: 1, language: 'en-us')),
-                  builder: (context, GetPopularMoviesState state) {
+              BlocBuilder<GetMoviesBloc, GetMoviesState>(
+                  builder: (context, GetMoviesState state) {
                     return _ViewWrapper(
-                      showLoader: state.showLoader,
+                      showLoader: state.showLoader!,
                       headingText: AppStrings.popularMovies,
                       listOfResult: state.movieResModel?.results ?? [],
+                      hasError: state.hasError ?? '',
                     );
                   }),
-              BlocBuilder(
-                  bloc: TopRatedMovieBloc()
-                    ..add(GetTopRatedMoviesApiRequestEvent(
-                        pageNo: 1, language: 'en-us')),
-                  builder: (context, TopRatedState state) {
+        /*            BlocBuilder(
+                  bloc: ,
+                  builder: (context, GetMoviesState state) {
                     return _ViewWrapper(
                       showLoader: state.showLoader,
                       headingText: AppStrings.topRatedMovies,
                       listOfResult: state.movieResModel?.results ?? [],
                     );
-                  }),
-              BlocBuilder(
-                  bloc: UpcomingMoviesBloc()
-                    ..add(GetUpcomingMoviesApiRequestEvent(
-                        pageNo: 1, language: 'en-us')),
-                  builder: (context, UpcomingMoviesState state) {
-                    return _ViewWrapper(
-                      showLoader: state.showLoader,
-                      headingText: AppStrings.upcomingMovies,
-                      listOfResult: state.movieResModel?.results ?? [],
-                    );
-                  }),
-              BlocBuilder(
-                  bloc: NowPlayingBloc()
-                    ..add(GetNowPlayingApiRequestEvent(
-                        pageNo: 1, language: 'en-us')),
-                  builder: (context, NowPlayingState state) {
-                    return _ViewWrapper(
-                      showLoader: state.showLoader,
-                      headingText: AppStrings.nowPlayingMovies,
-                      listOfResult: state.movieResModel?.results ?? [],
-                    );
-                  }),
+                  }),*/
+              // BlocBuilder(
+              //     bloc: UpcomingMoviesBloc()
+              //       ..add(GetUpcomingMoviesApiRequestEvent(
+              //           pageNo: 1, language: 'en-us')),
+              //     builder: (context, UpcomingMoviesState state) {
+              //       return _ViewWrapper(
+              //         showLoader: state.showLoader,
+              //         headingText: AppStrings.upcomingMovies,
+              //         listOfResult: state.movieResModel?.results ?? [],
+              //       );
+              //     }),
+              // BlocBuilder(
+              //     bloc: NowPlayingBloc()
+              //       ..add(GetNowPlayingApiRequestEvent(
+              //           pageNo: 1, language: 'en-us')),
+              //     builder: (context, NowPlayingState state) {
+              //       return _ViewWrapper(
+              //         showLoader: state.showLoader,
+              //         headingText: AppStrings.nowPlayingMovies,
+              //         listOfResult: state.movieResModel?.results ?? [],
+              //       );
+              //     }),
             ],
           ),
         ),
@@ -137,12 +144,12 @@ class _ViewWrapper extends StatelessWidget {
   final bool showLoader;
   final String headingText;
   final List<Result> listOfResult;
-
+  final String hasError;
   const _ViewWrapper(
       {super.key,
       required this.headingText,
       required this.showLoader,
-      required this.listOfResult});
+      required this.listOfResult, required this.hasError});
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +158,8 @@ class _ViewWrapper extends StatelessWidget {
         height: 40,
         child: Center(child: CircularProgressIndicator()),
       );
+    } else if (stringHasValue(hasError)) {
+      return Text(hasError);
     } else if (listOfResult.isEmpty) {
       return const SizedBox.shrink();
     } else {
