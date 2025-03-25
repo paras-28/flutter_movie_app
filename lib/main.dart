@@ -15,6 +15,7 @@ import 'core/utils/shared_prefs_keys.dart';
 import 'data/data_utility/api_end_points.dart';
 
 main() async {
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
