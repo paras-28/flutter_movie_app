@@ -9,4 +9,5 @@ class AppStrings {
   static const String upcomingMovies = "Upcoming movies";
   static const String topRatedMovies = "Top rated movies";
   static const String nowPlayingMovies = "Now playing movies";
+  static const String movieDetails = "Movie Details";
 }

@@ -34,7 +34,7 @@ class AppRepoImpl implements AppRepo {
       throw DioExceptions.fromDioError(
               dioError: e, errorFrom: "getAllPopularMovies")
           .errorMessage();
-      // if you want to customize the error message
+      // if you want to customize the  error message
       //  int statusCode =  DioExceptions.fromDioError(dioError: e, errorFrom: "login").errorStatusCode();
       //  if(statusCode == 400)
       //  {
@@ -55,14 +55,14 @@ class AppRepoImpl implements AppRepo {
     dioInst.options = options;
     try {
       var response = await DioClient(dioInst).get(
-          url: ApiEndPoints.basePath+path,
-          uniqueKey: ApiEndPoints.basePath+path,
-          queryParameters: {'language': language, 'page': pageNo},
+        url: ApiEndPoints.basePath + path,
+        uniqueKey: ApiEndPoints.basePath + path,
+        queryParameters: {'language': language, 'page': pageNo},
       );
       return MovieResModel.fromJson(response.data);
     } on dio.DioException catch (e) {
       throw DioExceptions.fromDioError(
-              dioError: e, errorFrom: ApiEndPoints.basePath+path)
+              dioError: e, errorFrom: ApiEndPoints.basePath + path)
           .errorMessage();
       // if you want to customize the error message
       //  int statusCode =  DioExceptions.fromDioError(dioError: e, errorFrom: "login").errorStatusCode();

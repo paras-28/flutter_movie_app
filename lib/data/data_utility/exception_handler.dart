@@ -71,10 +71,8 @@ class DioExceptions implements Exception {
 
   int errorStatusCode() => statusCode;
 
-
-  static getServerErrorMessage(DioException dioError)
-  {
-   return dioError.response?.data["error"] ;
+  static getServerErrorMessage(DioException dioError) {
+    return dioError.response?.data["error"];
   }
 
   void _prettyPrintError(
