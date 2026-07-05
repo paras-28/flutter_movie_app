@@ -37,7 +37,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
-//  flavorDimensions += "default" this is powerful for creating
+/*//  flavorDimensions += "default" this is powerful for creating
     flavorDimensions += "default"
 
     productFlavors {
@@ -61,7 +61,7 @@ android {
             manifestPlaceholders = [appName: "production"]
 //            applicationIdSuffix = ""
         }
-    }
+    }*/
 }
 
 flutter {

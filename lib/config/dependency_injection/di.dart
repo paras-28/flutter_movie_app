@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:movie_app/data/data_utility/api_end_points.dart';
 import 'package:movie_app/data/repositories/app_repo/app_repo_impl.dart';
 import 'package:movie_app/domain/repositories/app_repo/app_repo.dart';
+import 'package:movie_app/domain/use_cases/get_popular_movies_use_case.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -21,6 +22,10 @@ Future<void> setup() async {
       sendTimeout: const Duration(seconds: 10))));
 
   di.registerSingleton<AppRepo>(AppRepoImpl(dioInst: di()));
+
+  di.registerSingleton<GetPopularMoviesUseCase>(
+    GetPopularMoviesUseCase(appRepo: di()),
+  );
 
   di.registerSingletonAsync<SharedPreferences>(() async {
     return await SharedPreferences.getInstance();
