@@ -1,6 +1,5 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -11,12 +10,8 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -37,31 +32,12 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
-/*//  flavorDimensions += "default" this is powerful for creating
-    flavorDimensions += "default"
+}
 
-    productFlavors {
-        create("development") {
-            applicationId "com.paras.development" // This is the base applicationId for the development flavor
-            dimension = "default"
-            manifestPlaceholders = [appName: "development"]
-//            applicationIdSuffix = ".dev"  // This will append .dev to the applicationId, making it com.paras.development.dev
-        }
-
-        create("staging") {
-            applicationId "com.paras.staging" //
-            dimension = "default"
-            manifestPlaceholders = [appName: 'staging']
-//            applicationIdSuffix = ".stg"
-        }
-
-        create("production") {
-            applicationId "com.paras.movieapp" //
-            dimension = "default"
-            manifestPlaceholders = [appName: "production"]
-//            applicationIdSuffix = ""
-        }
-    }*/
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
 
 flutter {
